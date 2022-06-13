@@ -151,8 +151,6 @@ const createSomeAd = () => {
   };
 };
 
-const createAds = () => {
-  return Array.from({length: SOME_ADS_COUNTER}, createSomeAd);
-};
+const createAds = () => Array.from({length: SOME_ADS_COUNTER}, createSomeAd);
 
 export {createAds};
