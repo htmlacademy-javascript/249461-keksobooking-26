@@ -5,19 +5,12 @@ const mapCanvas = document.querySelector('#map-canvas');
 
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const getApartmentName = (type) => {
-  switch (type) {
-    case 'palace':
-      return 'Дворец';
-    case 'flat':
-      return 'Квартира';
-    case 'house':
-      return 'Дом';
-    case 'bungalow':
-      return 'Бунгало';
-    case 'hotel':
-      return 'Отель';
-  }
+const apartmentNames = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
 };
 
 /**
@@ -30,11 +23,11 @@ const getPhotosList = (photosWrapper, photoUrls) => {
   const photoTemplate = photosWrapper.querySelector('img');
   const photosList = document.createDocumentFragment();
 
-  for (let i = 0; i < photoUrls.length; i++) {
+  photoUrls.forEach((url) => {
     const photo = photoTemplate.cloneNode();
-    photo.src = photoUrls[i];
+    photo.src = url;
     photosList.appendChild(photo);
-  }
+  });
 
   photosWrapper.textContent = '';
   photosWrapper.appendChild(photosList);
@@ -43,12 +36,13 @@ const getPhotosList = (photosWrapper, photoUrls) => {
 
 /**
  * Функция оставляет только те удобства которые указаны в объявлении
- * @param featuresList Список всех удобств
+ * @param featuresWrapper Родительский блок списка с удобствами
  * @param adFeatures Списко доступных удобств
  */
-const getFeatures = (featuresList, adFeatures) => {
+const getFeatures = (featuresWrapper, adFeatures) => {
+  const featuresList = featuresWrapper.querySelectorAll('.popup__feature');
   featuresList.forEach((featuresListItem) => {
-    const exist =  adFeatures.some(
+    const exist = adFeatures.some(
       (adFeature) => featuresListItem.classList.contains(`popup__feature--${adFeature}`)
     );
 
@@ -58,32 +52,59 @@ const getFeatures = (featuresList, adFeatures) => {
   });
 };
 
-/*
-! При такой проверке линтер ругается что не используется 1 из параметров (3-ий).
-! Хотя функция отрабатывает корректно
+/**
+ * Проверка существования текстового контента
+ * @param element Элемент которому необходимо добавить содержимое
+ * @param hasContent Проверяемое значение приведенное к boolean (!!)
+ * @param content Содержимое для вставки
+ * @param contentType Тип вставки; по умолчанию textContent; Также используется src;
+ * @returns {*}
+ */
+const checkAdItemText = (element, hasContent, content, contentType = 'textContent') => {
+  if (!hasContent) {
+    return element.remove();
+  }
 
-const checkAdItem = (item, element, includeContentType = 'textContent') => {
-  item ? element.includeContentType = item : element.remove();
-};*/
+  element[contentType] = content;
+};
+
+/**
+ * Проверка массива на существование и длину.
+ * Если массива нет, или его длина 0 обертка удаляется из разметки
+ * @param wrapper Блок в который генерируется вставка списка элементов
+ * @param dataList Массив данных для вставки
+ * @param cb Функция которая генерирует код разметки на основе массива данных, и шаблона элемента внутри переданной обертки
+ * @returns {*}
+ */
+const checkDataList = (wrapper, dataList, cb) => {
+  if (dataList === undefined) {
+    return wrapper.remove();
+  }
+
+  if (!dataList.length) {
+    return wrapper.remove();
+  }
+
+  return cb(wrapper, dataList);
+};
 
 const similarAds = [];
 
 similarAdsContent.forEach(({author, offer}) => {
   const similarAd = adTemplate.cloneNode(true);
 
-  similarAd.querySelector('.popup__avatar').src = author.avatar;
-  similarAd.querySelector('.popup__title').textContent = offer.title;
-  similarAd.querySelector('.popup__text--address').textContent = offer.address;
-  similarAd.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  similarAd.querySelector('.popup__type').textContent = getApartmentName(offer.type);
-  similarAd.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
-  similarAd.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  getFeatures(similarAd.querySelectorAll('.popup__features .popup__feature'),offer.features);
-  similarAd.querySelector('.popup__description').textContent = offer.description;
-  getPhotosList(similarAd.querySelector('.popup__photos'), offer.photos);
+  checkAdItemText(similarAd.querySelector('.popup__avatar'), !!author.avatar, author.avatar, 'src');
+  checkAdItemText(similarAd.querySelector('.popup__title'), !!offer.title, offer.title);
+  checkAdItemText(similarAd.querySelector('.popup__text--address'), !!offer.address, offer.address);
+  checkAdItemText(similarAd.querySelector('.popup__text--price'), !!offer.price, `${offer.price} ₽/ночь`);
+  checkAdItemText(similarAd.querySelector('.popup__type'), !!offer.type, apartmentNames[offer.type]);
+  checkAdItemText(similarAd.querySelector('.popup__text--capacity'), !!offer.rooms && !!offer.guests, `${offer.rooms} комнаты для ${offer.guests} гостей`);
+  checkAdItemText(similarAd.querySelector('.popup__text--time'), !!offer.checkin && !!offer.checkout, `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
+  checkDataList(similarAd.querySelector('.popup__features'), offer.features, getFeatures);
+  checkAdItemText(similarAd.querySelector('.popup__description'), !!offer.description, offer.description);
+  checkDataList(similarAd.querySelector('.popup__photos'), offer.photos, getPhotosList);
 
   similarAds.push(similarAd);
 });
 
 mapCanvas.append(similarAds[0]);
-
