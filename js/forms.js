@@ -1,3 +1,6 @@
+const filtersForm = document.querySelector('.map__filters');
+const adForm = document.querySelector('.ad-form');
+
 /**
  * Формериует список полей формы
  * @param form форма внутри которой необходиом найти все поля
@@ -10,45 +13,42 @@ const getFormFields = (form) => {
 
   const formFields = [];
 
-  formFields.push.apply(formFields, inputFields);
-  formFields.push.apply(formFields, selectFields);
-  formFields.push.apply(formFields, textareaFields);
+  formFields.push(...inputFields);
+  formFields.push(...selectFields);
+  formFields.push(...textareaFields);
 
   return formFields;
 };
 
 /**
- * Получает массив с формами и добавляет класс который отключает форму
- * и добавляет всем полям формы аттрибут disabled
+ * Отключает или включает поля формы в зависимости от переданного параметра
+ * @param disabled boolean true / false
  */
-const disableForms = () => {
-  const forms = document.querySelectorAll('form');
+const deactivateForms = (disabled) => {
+  if (disabled === true) {
+    filtersForm.classList.add('map__filters--disabled');
+    adForm.classList.add('ad-form--disabled');
+  } else {
+    filtersForm.classList.remove('map__filters--disabled');
+    adForm.classList.remove('ad-form--disabled');
+  }
+
+  const forms = [];
+  forms.push(...filtersForm);
+  forms.push(...adForm);
 
   forms.forEach((form) => {
-    form.classList.add('ad-form--disabled');
-
     getFormFields(form).forEach((field) => {
-      field.disabled = true;
+      field.disabled = disabled;
     });
   });
 };
 
-disableForms();
-
-/**
- * Активация форм когда страница полностью загружена и готова к работе
- */
-const activateForms = () => {
-  const forms = document.querySelectorAll('form');
-
-  forms.forEach((form) => {
-    form.classList.remove('ad-form--disabled');
-
-    getFormFields(form).forEach((field) => {
-      field.disabled = false;
-    });
-  });
-};
+deactivateForms(true);
 
 /* Позже вызов будет проиходить после загрузки карты, а пока по окончанию загрузки страницы */
-document.addEventListener('load', activateForms);
+window.addEventListener('load', () => {
+  deactivateForms(false);
+});
+
+export {adForm};
