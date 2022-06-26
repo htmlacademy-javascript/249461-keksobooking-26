@@ -5,26 +5,26 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
 });
 
-const maxGuests = {
-  1: 1,
-  2: 2,
-  3: 3,
-  100: 0,
-};
+const ROOMS_WITHOUT_GUESTS = '100';
+const NO_GUESTS = '0';
 
 const checkGuestsCount = (guestsCount) => {
   const roomsCount = adForm.querySelector('#room_number').value;
-  return guestsCount <= maxGuests[roomsCount];
+  if (roomsCount === ROOMS_WITHOUT_GUESTS || guestsCount === NO_GUESTS) {
+    return roomsCount === ROOMS_WITHOUT_GUESTS && guestsCount === NO_GUESTS;
+  }
+
+  return guestsCount <= roomsCount;
 };
 
 const getGuestCountError = () => {
   const roomsCount = adForm.querySelector('#room_number').value;
 
-  if (roomsCount === '100') {
+  if (roomsCount === ROOMS_WITHOUT_GUESTS) {
     return 'Не для гостей';
   }
 
-  return `Максимальное кол-во гостей: ${maxGuests[roomsCount]}`;
+  return `Максимальное кол-во гостей: ${roomsCount}`;
 };
 
 const guests = adForm.querySelector('#capacity');
