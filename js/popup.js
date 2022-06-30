@@ -1,7 +1,6 @@
 import {createAds} from './data.js';
 
 const similarAdsContent = createAds();
-const mapCanvas = document.querySelector('#map-canvas');
 
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
@@ -88,9 +87,7 @@ const checkDataList = (wrapper, dataList, cb) => {
   return cb(wrapper, dataList);
 };
 
-const similarAds = [];
-
-similarAdsContent.forEach(({author, offer}) => {
+const createAdPopup = (author, offer) => {
   const similarAd = adTemplate.cloneNode(true);
 
   checkAdItemText(similarAd.querySelector('.popup__avatar'), !!author.avatar, author.avatar, 'src');
@@ -104,7 +101,7 @@ similarAdsContent.forEach(({author, offer}) => {
   checkAdItemText(similarAd.querySelector('.popup__description'), !!offer.description, offer.description);
   checkDataList(similarAd.querySelector('.popup__photos'), offer.photos, getPhotosList);
 
-  similarAds.push(similarAd);
-});
+  return similarAd;
+};
 
-mapCanvas.append(similarAds[0]);
+export {similarAdsContent, createAdPopup};

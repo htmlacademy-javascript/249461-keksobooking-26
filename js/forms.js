@@ -46,9 +46,4 @@ const deactivateForms = (disabled) => {
 
 deactivateForms(true);
 
-/* Позже вызов будет проиходить после загрузки карты, а пока по окончанию загрузки страницы */
-window.addEventListener('load', () => {
-  deactivateForms(false);
-});
-
-export {adForm};
+export {adForm, deactivateForms};
