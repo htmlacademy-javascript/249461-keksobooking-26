@@ -1,7 +1,6 @@
 import {adForm, deactivateForms} from './forms.js';
 import {similarAdsContent, createAdPopup} from './popup.js';
 
-
 const MAP_START = {
   lat: 35.67500,
   lng: 139.75000,
@@ -12,6 +11,24 @@ const MAIN_PIN_START = {
   lat: 35.65000,
   lng: 139.70000,
 };
+
+const MAIN_PIN_ICON = {
+  url: './img/main-pin.svg',
+  size: [52, 52],
+  corner: [26, 52],
+};
+
+const AD_PIN_ICON = {
+  url: './img/pin.svg',
+  size: [40, 40],
+  corner: [20, 40],
+};
+
+const DIGITS = 5;
+
+
+const addressField = adForm.querySelector('#address');
+addressField.value = `${MAIN_PIN_START.lat.toFixed(DIGITS)}, ${MAIN_PIN_START.lng.toFixed(DIGITS)}`;
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -29,10 +46,10 @@ L.tileLayer(
   },
 ).addTo(map);
 
-const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+const mainPin = L.icon({
+  iconUrl: MAIN_PIN_ICON.url,
+  iconSize: MAIN_PIN_ICON.size,
+  iconAnchor: MAIN_PIN_ICON.corner,
 });
 
 const mainMapPin = L.marker(
@@ -42,23 +59,22 @@ const mainMapPin = L.marker(
   },
   {
     draggable: true,
-    icon: mainPinIcon
+    icon: mainPin
   }
 );
 
 mainMapPin.addTo(map);
 
-mainMapPin.on('moveend', (evt) => {
-  const addressField = adForm.querySelector('#address');
+mainMapPin.on('move', (evt) => {
   const address = evt.target.getLatLng();
-  addressField.value = `${address.lat.toFixed(5)}, ${address.lng.toFixed(5)}`;
+  addressField.value = `${address.lat.toFixed(DIGITS)}, ${address.lng.toFixed(DIGITS)}`;
 });
 
 /* Метки объявлений */
 const adPinIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconUrl: AD_PIN_ICON.url,
+  iconSize: AD_PIN_ICON.size,
+  iconAnchor: AD_PIN_ICON.corner,
 });
 
 
@@ -91,7 +107,10 @@ similarAdsContent.forEach(({author, offer, location}) => {
 /* Кнопка сброса карты и маркера к дефолту */
 const resetButton = adForm.querySelector('.ad-form__reset');
 
-resetButton.addEventListener('click', () => {
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+
   mainMapPin.setLatLng({
     lat: MAIN_PIN_START.lat,
     lng: MAIN_PIN_START.lng,
@@ -101,4 +120,7 @@ resetButton.addEventListener('click', () => {
     lat: MAP_START.lat,
     lng: MAP_START.lng,
   }, MAP_START.scale);
+
+  const defaultAddress = mainMapPin.getLatLng();
+  addressField.value = `${defaultAddress.lat.toFixed(DIGITS)}, ${defaultAddress.lng.toFixed(DIGITS)}`;
 });
