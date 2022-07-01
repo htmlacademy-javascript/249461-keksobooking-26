@@ -93,3 +93,5 @@ adForm.addEventListener('submit', (evt) => {
     // Show error message
   }
 });
+
+export {priceField};
