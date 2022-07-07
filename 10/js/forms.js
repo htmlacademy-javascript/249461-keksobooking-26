@@ -1,9 +1,6 @@
 const filtersForm = document.querySelector('.map__filters');
 const adForm = document.querySelector('.ad-form');
 
-const priceField = adForm.querySelector('#price');
-const priceRangeSlider = adForm.querySelector('.ad-form__slider');
-
 /**
  * Формериует список полей формы
  * @param form форма внутри которой необходиом найти все поля
@@ -50,8 +47,5 @@ const deactivateForms = (disabled) => {
 deactivateForms(true);
 
 export {
-  adForm,
-  priceField,
-  priceRangeSlider,
   deactivateForms
 };

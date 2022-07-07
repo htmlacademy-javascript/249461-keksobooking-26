@@ -1,4 +1,6 @@
-import {priceField, priceRangeSlider} from './forms.js';
+const adForm = document.querySelector('.ad-form');
+const priceField = adForm.querySelector('#price');
+const priceRangeSlider = adForm.querySelector('.ad-form__slider');
 
 noUiSlider.create(priceRangeSlider, {
   range: {
@@ -22,7 +24,3 @@ priceRangeSlider.noUiSlider.on('update', () => {
 priceField.addEventListener('change', (evt) => {
   priceRangeSlider.noUiSlider.set(evt.target.value);
 });
-
-export {
-  priceRangeSlider
-};

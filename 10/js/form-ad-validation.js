@@ -1,6 +1,10 @@
-import {adForm, priceField, priceRangeSlider} from './forms.js';
 import {setData} from './backend.js';
 import {showMessageSuccess, showMessageError} from './util.js';
+import {setDefaultAddress} from './map.js';
+
+const adForm = document.querySelector('.ad-form');
+const priceField = adForm.querySelector('#price');
+const priceRangeSlider = adForm.querySelector('.ad-form__slider');
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -105,6 +109,7 @@ adForm.addEventListener('submit', (evt) => {
         showMessageSuccess();
         adForm.reset();
         priceRangeSlider.noUiSlider.set(0);
+        setDefaultAddress();
         unblockSubmitButton();
       },
       () => {
