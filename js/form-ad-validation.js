@@ -1,4 +1,6 @@
-import {adForm} from './forms.js';
+import {adForm, priceField, priceRangeSlider} from './forms.js';
+import {setData} from './backend.js';
+import {showMessageSuccess, showMessageError} from './util.js';
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -38,7 +40,6 @@ const rooms = adForm.querySelector('#room_number');
 rooms.addEventListener('change', onRoomsChange);
 
 
-const priceField = adForm.querySelector('#price');
 const minApartmentPrice = {
   'bungalow': 0,
   'flat': 1000,
@@ -79,19 +80,42 @@ timeOut.addEventListener('change',  () => {
   timeIn.value = timeOut.value;
 });
 
+/* TEMPORARY */
+const submitButton = adForm.querySelector('.ad-form__submit');
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
 
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+/* TEMPORARY */
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   const isValid = pristine.validate();
 
   if (isValid) {
-    // All is OK, send form
-    // Show success message
-  } else {
-    // You need fix mistakes;
-    // Show error message
+    blockSubmitButton();
+    setData(
+      () => {
+        showMessageSuccess();
+        adForm.reset();
+        priceRangeSlider.noUiSlider.set(0);
+        unblockSubmitButton();
+      },
+      () => {
+        showMessageError();
+        unblockSubmitButton();
+      },
+      new FormData(evt.target),
+    );
   }
 });
 
-export {priceField};
+export {
+  priceField
+};

@@ -1,5 +1,5 @@
-import {adForm, deactivateForms} from './forms.js';
-import {similarAdsContent, createAdPopup} from './popup.js';
+import {adForm, priceRangeSlider, deactivateForms} from './forms.js';
+import {createAdPopup} from './popup.js';
 
 const MAP_START = {
   lat: 35.67500,
@@ -96,9 +96,12 @@ const createAdMarkers = (author, offer, location) => {
 
 };
 
-similarAdsContent.forEach(({author, offer, location}) => {
-  createAdMarkers(author, offer, location);
-});
+const showSimilarAds = (similarAdsList) => {
+  similarAdsList.forEach(({author, offer, location}) => {
+    createAdMarkers(author, offer, location);
+  });
+};
+
 
 /* очистка слоя с маркерами объявлений */
 //mapPinLayer.clearLayers();
@@ -110,6 +113,7 @@ const resetButton = adForm.querySelector('.ad-form__reset');
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   adForm.reset();
+  priceRangeSlider.noUiSlider.set(0);
 
   mainMapPin.setLatLng({
     lat: MAIN_PIN_START.lat,
@@ -124,3 +128,7 @@ resetButton.addEventListener('click', (evt) => {
   const defaultAddress = mainMapPin.getLatLng();
   addressField.value = `${defaultAddress.lat.toFixed(DIGITS)}, ${defaultAddress.lng.toFixed(DIGITS)}`;
 });
+
+export {
+  showSimilarAds
+};
