@@ -46,4 +46,6 @@ const deactivateForms = (disabled) => {
 
 deactivateForms(true);
 
-export {adForm, deactivateForms};
+export {
+  deactivateForms
+};

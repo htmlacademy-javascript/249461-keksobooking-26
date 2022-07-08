@@ -1,7 +1,3 @@
-import {createAds} from './data.js';
-
-const similarAdsContent = createAds();
-
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const apartmentNames = {
@@ -104,4 +100,6 @@ const createAdPopup = (author, offer) => {
   return similarAd;
 };
 
-export {similarAdsContent, createAdPopup};
+export {
+  createAdPopup
+};

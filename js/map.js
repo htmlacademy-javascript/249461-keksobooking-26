@@ -1,5 +1,8 @@
-import {adForm, deactivateForms} from './forms.js';
-import {similarAdsContent, createAdPopup} from './popup.js';
+import {deactivateForms} from './forms.js';
+import {createAdPopup} from './popup.js';
+
+const adForm = document.querySelector('.ad-form');
+const priceRangeSlider = adForm.querySelector('.ad-form__slider');
 
 const MAP_START = {
   lat: 35.67500,
@@ -96,13 +99,19 @@ const createAdMarkers = (author, offer, location) => {
 
 };
 
-similarAdsContent.forEach(({author, offer, location}) => {
-  createAdMarkers(author, offer, location);
-});
+const showSimilarAds = (similarAdsList) => {
+  similarAdsList.forEach(({author, offer, location}) => {
+    createAdMarkers(author, offer, location);
+  });
+};
+
 
 /* очистка слоя с маркерами объявлений */
 //mapPinLayer.clearLayers();
 
+const setDefaultAddress = () => {
+  addressField.value = `${MAIN_PIN_START.lat.toFixed(DIGITS)}, ${MAIN_PIN_START.lng.toFixed(DIGITS)}`;
+};
 
 /* Кнопка сброса карты и маркера к дефолту */
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -110,6 +119,7 @@ const resetButton = adForm.querySelector('.ad-form__reset');
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   adForm.reset();
+  priceRangeSlider.noUiSlider.set(0);
 
   mainMapPin.setLatLng({
     lat: MAIN_PIN_START.lat,
@@ -121,6 +131,10 @@ resetButton.addEventListener('click', (evt) => {
     lng: MAP_START.lng,
   }, MAP_START.scale);
 
-  const defaultAddress = mainMapPin.getLatLng();
-  addressField.value = `${defaultAddress.lat.toFixed(DIGITS)}, ${defaultAddress.lng.toFixed(DIGITS)}`;
+  setDefaultAddress();
 });
+
+export {
+  showSimilarAds,
+  setDefaultAddress
+};

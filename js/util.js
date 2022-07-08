@@ -1,36 +1,81 @@
-// Функция взята из интернета и доработана
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-/**
- * Случайное положительное число в заданом диапазоне
- * @param a Начальное число
- * @param b Конечное число
- * @returns {number} Случайное число
- */
-const getRandomPositiveInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+const ALERT_SHOW_TIME = 5000;
 
-  const result = Math.random() * (upper - lower + 1) + lower;
+/*
+* Блок для показа ошибок при обмене информации с сервером
+* */
+const showAlertError = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
 
-  return Math.floor(result);
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
 };
 
-// Функция взята из интернета и доработана
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-/**
- * Случайное положительное число с плавающей точкой в заданом диапазоне
- * @param a Начальное число
- * @param b Конечное число
- * @param digits Кол-во знаков после запятой
- * @returns {number} Случайное число с плавающей точкой
- */
-const getRandomPositiveFloat = (a, b, digits = 1) => {
-  const lower = Math.min(Math.abs(a), Math.abs(b));
-  const upper = Math.max(Math.abs(a), Math.abs(b));
 
-  const result = Math.random() * (upper - lower) + lower;
+const messageSuccess = document.querySelector('#success').content.querySelector('.success');
+const messageError = document.querySelector('#error').content.querySelector('.error');
+const messageErrorCloseBtn = messageError.querySelector('.error__button');
 
-  return +result.toFixed(digits);
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+/* Success Message */
+const onMessageSuccessEscClose = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeMessageSuccess();
+  }
 };
 
-export {getRandomPositiveInteger,getRandomPositiveFloat};
+const showMessageSuccess = () => {
+  document.body.append(messageSuccess);
+  document.addEventListener('keydown', onMessageSuccessEscClose);
+  messageSuccess.addEventListener('click', closeMessageSuccess);
+};
+
+function closeMessageSuccess() {
+  messageSuccess.remove();
+  document.removeEventListener('keydown', onMessageSuccessEscClose);
+}
+
+/* Success Message */
+
+/* Error Message */
+const onMessageErrorEscClose = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeMessageError();
+  }
+};
+
+const showMessageError = () => {
+  document.body.append(messageError);
+  document.addEventListener('keydown', onMessageErrorEscClose);
+  messageErrorCloseBtn.addEventListener('click', closeMessageError);
+};
+
+function closeMessageError() {
+  messageError.remove();
+  document.removeEventListener('keydown', onMessageErrorEscClose);
+}
+
+/* Error Message */
+
+
+export {
+  showAlertError,
+  showMessageSuccess,
+  showMessageError
+};

@@ -1,6 +1,5 @@
-import {adForm} from './forms.js';
-import {priceField} from './form-ad-validation.js';
-
+const adForm = document.querySelector('.ad-form');
+const priceField = adForm.querySelector('#price');
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
 
 noUiSlider.create(priceRangeSlider, {
@@ -12,7 +11,7 @@ noUiSlider.create(priceRangeSlider, {
   step: 1,
   connect: 'lower',
   format: {
-    to: (value) =>  value.toFixed(0),
+    to: (value) => value.toFixed(0),
     from: (value) => parseFloat(value).toFixed(1)
   },
 });
