@@ -1,12 +1,27 @@
 import {getData} from './backend.js';
 import './popup.js';
-import {showSimilarAds} from './map.js';
+import {showFilteredAds} from './map.js';
 import './forms.js';
 import './form-ad-validation.js';
 import './form-slider.js';
+import './filters.js';
 
-const ADS_COUNTER = 10;
+const filtersForm = document.querySelector('.map__filters');
+const setFilterClick = (cb) => {
+  filtersForm.addEventListener('change', (evt) => {
+    const filter = evt.target;
+
+    if (filter.tagName === 'SELECT') {
+      cb();
+    }
+
+    if (filter.tagName === 'INPUT') {
+      cb();
+    }
+  });
+};
 
 getData((ads) => {
-  showSimilarAds(ads.slice(0, ADS_COUNTER));
+  showFilteredAds(ads);
+  setFilterClick(() => showFilteredAds(ads));
 });

@@ -1,5 +1,6 @@
 import {deactivateForms} from './forms.js';
 import {createAdPopup} from './popup.js';
+import {filterType, filterPrice, filterRooms, filterGuests, checkWifi, checkDishwasher, checkParking, checkWasher, checkElevator, checkConditioner} from './filters.js';
 
 const adForm = document.querySelector('.ad-form');
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
@@ -99,15 +100,26 @@ const createAdMarkers = (author, offer, location) => {
 
 };
 
-const showSimilarAds = (similarAdsList) => {
-  similarAdsList.forEach(({author, offer, location}) => {
-    createAdMarkers(author, offer, location);
-  });
+const ADS_COUNTER = 10;
+
+const showFilteredAds = (similarAdsList) => {
+  mapPinLayer.clearLayers();
+  similarAdsList
+    .filter(filterType)
+    .filter(filterPrice)
+    .filter(filterRooms)
+    .filter(filterGuests)
+    .filter(checkWifi)
+    .filter(checkDishwasher)
+    .filter(checkParking)
+    .filter(checkWasher)
+    .filter(checkElevator)
+    .filter(checkConditioner)
+    .slice(0, ADS_COUNTER)
+    .forEach(({author, offer, location}) => {
+      createAdMarkers(author, offer, location);
+    });
 };
-
-
-/* очистка слоя с маркерами объявлений */
-//mapPinLayer.clearLayers();
 
 const setDefaultAddress = () => {
   addressField.value = `${MAIN_PIN_START.lat.toFixed(DIGITS)}, ${MAIN_PIN_START.lng.toFixed(DIGITS)}`;
@@ -135,6 +147,6 @@ resetButton.addEventListener('click', (evt) => {
 });
 
 export {
-  showSimilarAds,
+  showFilteredAds,
   setDefaultAddress
 };
