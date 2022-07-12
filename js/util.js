@@ -122,5 +122,6 @@ function throttle (callback, delayBetweenFrames) {
 export {
   showAlertError,
   showMessageSuccess,
-  showMessageError
+  showMessageError,
+  debounce
 };

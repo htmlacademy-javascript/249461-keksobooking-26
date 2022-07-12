@@ -1,6 +1,6 @@
 import {deactivateForms} from './forms.js';
 import {createAdPopup} from './popup.js';
-import {filterType, filterPrice, filterRooms, filterGuests, checkWifi, checkDishwasher, checkParking, checkWasher, checkElevator, checkConditioner} from './filters.js';
+import {filterType, filterPrice, filterRooms, filterGuests, filterFeatures} from './filters.js';
 
 const adForm = document.querySelector('.ad-form');
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
@@ -109,12 +109,7 @@ const showFilteredAds = (similarAdsList) => {
     .filter(filterPrice)
     .filter(filterRooms)
     .filter(filterGuests)
-    .filter(checkWifi)
-    .filter(checkDishwasher)
-    .filter(checkParking)
-    .filter(checkWasher)
-    .filter(checkElevator)
-    .filter(checkConditioner)
+    .filter(filterFeatures)
     .slice(0, ADS_COUNTER)
     .forEach(({author, offer, location}) => {
       createAdMarkers(author, offer, location);

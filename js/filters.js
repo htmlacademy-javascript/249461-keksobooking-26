@@ -4,110 +4,102 @@ const housingType = filtersForm.querySelector('#housing-type');
 const housingPrice = filtersForm.querySelector('#housing-price');
 const housingRooms = filtersForm.querySelector('#housing-rooms');
 const housingGuests = filtersForm.querySelector('#housing-guests');
-const featureWifi = filtersForm.querySelector('#filter-wifi');
-const featureDishwasher = filtersForm.querySelector('#filter-dishwasher');
-const featureParking = filtersForm.querySelector('#filter-parking');
-const featureWasher = filtersForm.querySelector('#filter-washer');
-const featureElevator = filtersForm.querySelector('#filter-elevator');
-const featureConditioner = filtersForm.querySelector('#filter-conditioner');
+const housingFeatures = filtersForm.querySelector('#housing-features');
+
+const DefaultSort = {
+  HOUSING_TYPE: 'any',
+  HOUSING_PRICE: 'any',
+  HOUSING_ROOMS: 'any',
+  HOUSING_GUESTS: 'any',
+};
+
+const PriceFilterStep = {
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high'
+};
+
+const PriceFilterRange = {
+  LOW: 10000,
+  HIGH: 50000,
+};
+
+const setFilterClick = (cb) => {
+  filtersForm.addEventListener('change', (evt) => {
+    const filter = evt.target;
+
+    if (filter.tagName === 'SELECT') {
+      cb();
+    }
+
+    if (filter.tagName === 'INPUT') {
+      cb();
+    }
+  });
+};
 
 const filterType = ({offer}) => {
-  if (housingType.value !== 'any') {
+  if (housingType.value !== DefaultSort.HOUSING_TYPE) {
     return housingType.value === offer.type;
   }
   return true;
 };
 
 const filterPrice = ({offer}) => {
-  if (housingPrice.value !== 'any') {
-    if (housingPrice.value === 'low' && offer.price <= 10000) {
-      return true;
+  if (housingPrice.value !== DefaultSort.HOUSING_PRICE) {
+    if (housingPrice.value === PriceFilterStep.LOW) {
+      return offer.price <= PriceFilterRange.LOW;
     }
-    if (housingPrice.value === 'middle' && (offer.price > 10000 && offer.price < 50000)) {
-      return true;
+    if (housingPrice.value === PriceFilterStep.MIDDLE) {
+      return (offer.price > PriceFilterRange.LOW && offer.price < PriceFilterRange.HIGH);
     }
-    if (housingPrice.value === 'high' && offer.price >= 50000) {
-      return true;
+    if (housingPrice.value === PriceFilterStep.HIGH) {
+      return offer.price >= PriceFilterRange.HIGH;
     }
   }
   return true;
 };
 
 const filterRooms = ({offer}) => {
-  if (housingRooms.value !== 'any') {
+  if (housingRooms.value !== DefaultSort.HOUSING_ROOMS) {
     return parseFloat(housingRooms.value) === offer.rooms;
   }
   return true;
 };
 
 const filterGuests = ({offer}) => {
-  if (housingGuests.value !== 'any') {
+  if (housingGuests.value !== DefaultSort.HOUSING_GUESTS) {
     return parseFloat(housingGuests.value) === offer.guests;
   }
   return true;
 };
 
-const checkAdFeatures = (featuresList, feature) => {
-  for (let i = 0; i < featuresList.length; i++) {
-    if (featuresList[i] === feature) {
-      return true;
+const filterFeatures = ({offer}) => {
+  const checkedFeatures = housingFeatures.querySelectorAll('input:checked');
+
+  if (checkedFeatures.length) {
+    if (!offer.features || !offer.features.length) {
+      return false;
+    }
+  } else {
+    return true;
+  }
+
+  for (const input of checkedFeatures) {
+    if (!offer.features.includes(input.value)) {
+      return false;
     }
   }
-  return false;
-};
 
-const checkWifi = ({offer}) => {
-  if (featureWifi.checked) {
-    return offer.features && checkAdFeatures(offer.features, featureWifi.value);
-  }
-  return true;
-};
-
-const checkDishwasher = ({offer}) => {
-  if (featureDishwasher.checked) {
-    return offer.features && checkAdFeatures(offer.features, featureDishwasher.value);
-  }
-  return true;
-};
-
-const checkParking = ({offer}) => {
-  if (featureParking.checked) {
-    return offer.features && checkAdFeatures(offer.features, featureParking.value);
-  }
-  return true;
-};
-
-const checkWasher = ({offer}) => {
-  if (featureWasher.checked) {
-    return offer.features && checkAdFeatures(offer.features, featureWasher.value);
-  }
-  return true;
-};
-
-const checkElevator = ({offer}) => {
-  if (featureElevator.checked) {
-    return offer.features && checkAdFeatures(offer.features, featureElevator.value);
-  }
-  return true;
-};
-
-const checkConditioner = ({offer}) => {
-  if (featureConditioner.checked) {
-    return offer.features && checkAdFeatures(offer.features, featureConditioner.value);
-  }
   return true;
 };
 
 
 export {
+  setFilterClick,
   filterType,
   filterPrice,
   filterRooms,
   filterGuests,
-  checkWifi,
-  checkDishwasher,
-  checkParking,
-  checkWasher,
-  checkElevator,
-  checkConditioner
+  filterFeatures,
 };
