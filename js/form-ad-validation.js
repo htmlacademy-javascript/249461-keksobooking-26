@@ -1,6 +1,6 @@
 import {setData} from './backend.js';
 import {showMessageSuccess, showMessageError} from './util.js';
-import {setDefaultAddress} from './map.js';
+import {setDefaultAddress, resetFilters} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 const priceField = adForm.querySelector('#price');
@@ -119,6 +119,8 @@ adForm.addEventListener('submit', (evt) => {
       new FormData(evt.target),
     );
   }
+
+  resetFilters();
 });
 
 export {
