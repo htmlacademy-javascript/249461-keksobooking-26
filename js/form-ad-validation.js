@@ -84,7 +84,7 @@ timeOut.addEventListener('change',  () => {
   timeIn.value = timeOut.value;
 });
 
-/* TEMPORARY */
+
 const submitButton = adForm.querySelector('.ad-form__submit');
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -96,7 +96,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-/* TEMPORARY */
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 

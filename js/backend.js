@@ -1,23 +1,23 @@
 import {showAlertError} from './util.js';
+import {deactivateForm} from './forms.js';
 
 const GET_DATA_URL = 'https://26.javascript.pages.academy/keksobooking/data';
 const SET_DATA_URL = 'https://26.javascript.pages.academy/keksobooking';
 
-const getData = (showAds) => {
+const getData = () =>
   fetch(GET_DATA_URL)
     .then((response) => {
       if (response.ok) {
+        deactivateForm('.map__filters', false);
         return response.json();
       }
       throw new Error(`${response.status}: ${response.statusText}`);
     })
-    .then((adsList) => {
-      showAds(adsList);
-    })
     .catch((err) => {
       showAlertError(err);
     });
-};
+
+const advertsPromise = getData();
 
 const setData = (onSuccess, onError, body) => {
   fetch(SET_DATA_URL,
@@ -39,6 +39,6 @@ const setData = (onSuccess, onError, body) => {
 };
 
 export {
-  getData,
+  advertsPromise,
   setData
 };

@@ -1,6 +1,3 @@
-const filtersForm = document.querySelector('.map__filters');
-const adForm = document.querySelector('.ad-form');
-
 /**
  * Формериует список полей формы
  * @param form форма внутри которой необходиом найти все поля
@@ -22,30 +19,25 @@ const getFormFields = (form) => {
 
 /**
  * Отключает или включает поля формы в зависимости от переданного параметра
+ * @param formClass класс формы которую необходимо заблокировать/разблокировать
  * @param disabled boolean true / false
  */
-const deactivateForms = (disabled) => {
+const deactivateForm = (formClass, disabled) => {
+  const form = document.querySelector(`${formClass}`);
   if (disabled === true) {
-    filtersForm.classList.add('map__filters--disabled');
-    adForm.classList.add('ad-form--disabled');
+    form.classList.add(`${formClass}--disabled`);
   } else {
-    filtersForm.classList.remove('map__filters--disabled');
-    adForm.classList.remove('ad-form--disabled');
+    form.classList.remove(`${formClass}--disabled`);
   }
 
-  const forms = [];
-  forms.push(...filtersForm);
-  forms.push(...adForm);
-
-  forms.forEach((form) => {
-    getFormFields(form).forEach((field) => {
-      field.disabled = disabled;
-    });
+  getFormFields(form).forEach((field) => {
+    field.disabled = disabled;
   });
 };
 
-deactivateForms(true);
+deactivateForm('.map__filters', true);
+deactivateForm('.ad-form', true);
 
 export {
-  deactivateForms
+  deactivateForm
 };

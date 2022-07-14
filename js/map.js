@@ -1,6 +1,7 @@
-import {deactivateForms} from './forms.js';
+import {deactivateForm} from './forms.js';
 import {createAdPopup} from './popup.js';
 import {filterType, filterPrice, filterRooms, filterGuests, filterFeatures} from './filters.js';
+import {advertsPromise} from './backend.js';
 
 const adForm = document.querySelector('.ad-form');
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
@@ -36,7 +37,7 @@ addressField.value = `${MAIN_PIN_START.lat.toFixed(DIGITS)}, ${MAIN_PIN_START.ln
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    deactivateForms(false);
+    deactivateForm('.ad-form', false);
   })
   .setView({
     lat: MAP_START.lat,
@@ -122,6 +123,8 @@ const setDefaultAddress = () => {
 
 /* Кнопка сброса карты и маркера к дефолту */
 const resetButton = adForm.querySelector('.ad-form__reset');
+const filtersForm = document.querySelector('.map__filters');
+
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
@@ -139,6 +142,12 @@ resetButton.addEventListener('click', (evt) => {
   }, MAP_START.scale);
 
   setDefaultAddress();
+
+
+  filtersForm.reset();
+  advertsPromise.then((ads) => {
+    showFilteredAds(ads);
+  });
 });
 
 export {
