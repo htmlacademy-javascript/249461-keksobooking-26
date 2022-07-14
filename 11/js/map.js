@@ -5,6 +5,7 @@ import {advertsPromise} from './backend.js';
 
 const adForm = document.querySelector('.ad-form');
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
+const filtersForm = document.querySelector('.map__filters');
 
 const MAP_START = {
   lat: 35.67500,
@@ -118,19 +119,6 @@ const showFilteredAds = (similarAdsList) => {
 };
 
 const setDefaultAddress = () => {
-  addressField.value = `${MAIN_PIN_START.lat.toFixed(DIGITS)}, ${MAIN_PIN_START.lng.toFixed(DIGITS)}`;
-};
-
-/* Кнопка сброса карты и маркера к дефолту */
-const resetButton = adForm.querySelector('.ad-form__reset');
-const filtersForm = document.querySelector('.map__filters');
-
-
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  adForm.reset();
-  priceRangeSlider.noUiSlider.set(0);
-
   mainMapPin.setLatLng({
     lat: MAIN_PIN_START.lat,
     lng: MAIN_PIN_START.lng,
@@ -141,16 +129,32 @@ resetButton.addEventListener('click', (evt) => {
     lng: MAP_START.lng,
   }, MAP_START.scale);
 
-  setDefaultAddress();
+  addressField.value = `${MAIN_PIN_START.lat.toFixed(DIGITS)}, ${MAIN_PIN_START.lng.toFixed(DIGITS)}`;
+};
 
+/* Кнопка сброса карты и маркера к дефолту */
+const resetButton = adForm.querySelector('.ad-form__reset');
 
+const resetFilters = () => {
   filtersForm.reset();
   advertsPromise.then((ads) => {
     showFilteredAds(ads);
   });
+};
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  priceRangeSlider.noUiSlider.set(0);
+
+  setDefaultAddress();
+
+  resetFilters();
 });
+
 
 export {
   showFilteredAds,
-  setDefaultAddress
+  setDefaultAddress,
+  resetFilters
 };
