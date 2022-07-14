@@ -1,4 +1,4 @@
-import {getData} from './backend.js';
+import {advertsPromise} from './backend.js';
 import './popup.js';
 import {showFilteredAds} from './map.js';
 import './forms.js';
@@ -9,7 +9,7 @@ import {debounce} from './util.js';
 
 const RERENDER_DELAY = 500;
 
-getData((ads) => {
+advertsPromise.then((ads) => {
   showFilteredAds(ads);
   setFilterClick(debounce(
     () => showFilteredAds(ads),
