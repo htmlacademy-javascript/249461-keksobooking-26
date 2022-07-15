@@ -1,6 +1,6 @@
 import {setData} from './backend.js';
 import {showMessageSuccess, showMessageError} from './util.js';
-import {setDefaultAddress} from './map.js';
+import {setDefaultAddress, resetFilters} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 const priceField = adForm.querySelector('#price');
@@ -84,7 +84,7 @@ timeOut.addEventListener('change',  () => {
   timeIn.value = timeOut.value;
 });
 
-/* TEMPORARY */
+
 const submitButton = adForm.querySelector('.ad-form__submit');
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -96,7 +96,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-/* TEMPORARY */
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
@@ -119,6 +119,8 @@ adForm.addEventListener('submit', (evt) => {
       new FormData(evt.target),
     );
   }
+
+  resetFilters();
 });
 
 export {

@@ -1,12 +1,17 @@
-import {getData} from './backend.js';
+import {advertsPromise} from './backend.js';
 import './popup.js';
-import {showSimilarAds} from './map.js';
+import {showFilteredAds} from './map.js';
 import './forms.js';
 import './form-ad-validation.js';
 import './form-slider.js';
+import {setFilterClick} from './filters.js';
+import {debounce} from './util.js';
 
-const ADS_COUNTER = 10;
+const RERENDER_DELAY = 500;
 
-getData((ads) => {
-  showSimilarAds(ads.slice(0, ADS_COUNTER));
+advertsPromise.then((ads) => {
+  showFilteredAds(ads);
+  setFilterClick(debounce(
+    () => showFilteredAds(ads),
+    RERENDER_DELAY));
 });
