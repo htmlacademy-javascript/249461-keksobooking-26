@@ -1,12 +1,12 @@
-const adTemplate = document.querySelector('#card').content.querySelector('.popup');
-
-const apartmentNames = {
+const ApartmentNames = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
   bungalow: 'Бунгало',
   hotel: 'Отель',
 };
+
+const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 /**
  * Формирует список фотографий объявления
@@ -90,7 +90,7 @@ const createAdPopup = (author, offer) => {
   checkAdItemText(similarAd.querySelector('.popup__title'), !!offer.title, offer.title);
   checkAdItemText(similarAd.querySelector('.popup__text--address'), !!offer.address, offer.address);
   checkAdItemText(similarAd.querySelector('.popup__text--price'), !!offer.price, `${offer.price} ₽/ночь`);
-  checkAdItemText(similarAd.querySelector('.popup__type'), !!offer.type, apartmentNames[offer.type]);
+  checkAdItemText(similarAd.querySelector('.popup__type'), !!offer.type, ApartmentNames[offer.type]);
   checkAdItemText(similarAd.querySelector('.popup__text--capacity'), !!offer.rooms && !!offer.guests, `${offer.rooms} комнаты для ${offer.guests} гостей`);
   checkAdItemText(similarAd.querySelector('.popup__text--time'), !!offer.checkin && !!offer.checkout, `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
   checkDataList(similarAd.querySelector('.popup__features'), offer.features, getFeatures);
