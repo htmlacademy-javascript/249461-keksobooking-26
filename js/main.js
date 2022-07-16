@@ -6,6 +6,7 @@ import './form-ad-validation.js';
 import './form-slider.js';
 import {setFilterClick} from './filters.js';
 import {debounce} from './util.js';
+import './upload-photos.js';
 
 const RERENDER_DELAY = 500;
 
