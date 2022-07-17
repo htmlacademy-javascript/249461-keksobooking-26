@@ -11,8 +11,10 @@ import './upload-photos.js';
 const RERENDER_DELAY = 500;
 
 advertsPromise.then((ads) => {
-  showFilteredAds(ads);
-  setFilterClick(debounce(
-    () => showFilteredAds(ads),
-    RERENDER_DELAY));
+  if (Array.isArray(ads)) {
+    showFilteredAds(ads);
+    setFilterClick(debounce(
+      () => showFilteredAds(ads),
+      RERENDER_DELAY));
+  }
 });
