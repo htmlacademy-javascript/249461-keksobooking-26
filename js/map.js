@@ -1,6 +1,7 @@
 import {deactivateForm} from './forms.js';
 import {createAdPopup} from './popup.js';
 import {filterType, filterPrice, filterRooms, filterGuests, filterFeatures} from './filters.js';
+import {resetAdPhoto, resetAvatar} from './upload-photos.js';
 
 const MAP_START = {
   lat: 35.67500,
@@ -150,6 +151,8 @@ resetButton.addEventListener('click', (evt) => {
   setDefaultAddress();
 
   resetFilters();
+  resetAdPhoto();
+  resetAvatar();
 });
 
 
