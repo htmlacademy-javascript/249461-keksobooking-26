@@ -3,6 +3,7 @@ const ImgSize = {
   WIDTH: 70,
   HEIGHT: 70
 };
+const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
 const avatarUpload = document.querySelector('#avatar');
 const avatarPreview = document.querySelector('#avatar-preview');
@@ -25,9 +26,9 @@ const getImgUrl = (fileInput) => {
 
 const generateAdImgTag = (imgUrl) => {
   const img = document.createElement('img');
-  img.setAttribute('src', imgUrl);
-  img.setAttribute('width', ImgSize.WIDTH);
-  img.setAttribute('height', ImgSize.HEIGHT);
+  img.src = imgUrl;
+  img.width = ImgSize.WIDTH;
+  img.height = ImgSize.HEIGHT;
   return img;
 
 };
@@ -40,3 +41,13 @@ adUpload.addEventListener('change', () => {
   const adImg = generateAdImgTag(getImgUrl(adUpload));
   adPreviewWrapper.append(adImg);
 });
+
+const resetAdPhoto = () => {
+  adPreviewWrapper.innerHTML = '';
+};
+
+const resetAvatar = () => {
+  avatarPreview.src = DEFAULT_AVATAR;
+};
+
+export {resetAdPhoto, resetAvatar};

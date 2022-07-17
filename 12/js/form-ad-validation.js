@@ -1,6 +1,7 @@
 import {setData} from './backend.js';
 import {showMessageSuccess, showMessageError} from './util.js';
 import {setDefaultAddress, resetFilters} from './map.js';
+import {resetAdPhoto, resetAvatar} from './upload-photos.js';
 
 const ROOMS_WITHOUT_GUESTS = '100';
 const NO_GUESTS = '0';
@@ -115,4 +116,6 @@ adForm.addEventListener('submit', (evt) => {
   }
 
   resetFilters();
+  resetAdPhoto();
+  resetAvatar();
 });
