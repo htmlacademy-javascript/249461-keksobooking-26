@@ -17,8 +17,9 @@ const MinApartmentPrice = {
 const adForm = document.querySelector('.ad-form');
 const priceField = adForm.querySelector('#price');
 
-const roomsCount = adForm.querySelector('#room_number').value;
-const apartmentType = adForm.querySelector('#type').value;
+const roomsCount = adForm.querySelector('#room_number');
+const apartmentType = adForm.querySelector('#type');
+
 
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
 
@@ -28,19 +29,21 @@ const pristine = new Pristine(adForm, {
 });
 
 const checkGuestsCount = (guestsCount) => {
-  if (roomsCount === ROOMS_WITHOUT_GUESTS || guestsCount === NO_GUESTS) {
-    return roomsCount === ROOMS_WITHOUT_GUESTS && guestsCount === NO_GUESTS;
+  const roomsCountValue = roomsCount.value;
+  if (roomsCountValue === ROOMS_WITHOUT_GUESTS || guestsCount === NO_GUESTS) {
+    return roomsCountValue === ROOMS_WITHOUT_GUESTS && guestsCount === NO_GUESTS;
   }
 
-  return guestsCount <= roomsCount;
+  return guestsCount <= roomsCountValue;
 };
 
 const getGuestCountError = () => {
-  if (roomsCount === ROOMS_WITHOUT_GUESTS) {
+  const roomsCountValue = roomsCount.value;
+  if (roomsCountValue === ROOMS_WITHOUT_GUESTS) {
     return 'Не для гостей';
   }
 
-  return `Максимальное кол-во гостей: ${roomsCount}`;
+  return `Максимальное кол-во гостей: ${roomsCountValue}`;
 };
 
 const guests = adForm.querySelector('#capacity');
@@ -51,11 +54,19 @@ const onRoomsChange = () => {
 };
 
 const rooms = adForm.querySelector('#room_number');
+
 rooms.addEventListener('change', onRoomsChange);
 
 
-const checkAmount = (price) => parseInt(price, 10) >= MinApartmentPrice[apartmentType];
-const getAmountError = () => `Минимальная цена: ${MinApartmentPrice[apartmentType]}`;
+const checkAmount = (price) => {
+  const apartmentTypeValue = apartmentType.value;
+  return parseInt(price, 10) >= MinApartmentPrice[apartmentTypeValue];
+};
+
+const getAmountError = () => {
+  const apartmentTypeValue = apartmentType.value;
+  return `Минимальная цена: ${MinApartmentPrice[apartmentTypeValue]}`;
+};
 
 pristine.addValidator(priceField, checkAmount, getAmountError);
 

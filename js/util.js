@@ -1,4 +1,4 @@
-const ALERT_SHOW_TIME = 5000;
+const ALERT_SHOW_TIME = 10000;
 const KEY_ESCAPE = 'Escape';
 
 /*
@@ -36,17 +36,17 @@ const isEscapeKey = (evt) => evt.key === KEY_ESCAPE;
 const onMessageSuccessEscClose = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeMessageSuccess();
+    onClickCloseMessageSuccess();
   }
 };
 
 const showMessageSuccess = () => {
   document.body.append(messageSuccess);
   document.addEventListener('keydown', onMessageSuccessEscClose);
-  messageSuccess.addEventListener('click', closeMessageSuccess);
+  messageSuccess.addEventListener('click', onClickCloseMessageSuccess);
 };
 
-function closeMessageSuccess() {
+function onClickCloseMessageSuccess() {
   messageSuccess.remove();
   document.removeEventListener('keydown', onMessageSuccessEscClose);
 }
@@ -57,17 +57,17 @@ function closeMessageSuccess() {
 const onMessageErrorEscClose = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeMessageError();
+    onClickCloseMessageError();
   }
 };
 
 const showMessageError = () => {
   document.body.append(messageError);
   document.addEventListener('keydown', onMessageErrorEscClose);
-  messageErrorCloseBtn.addEventListener('click', closeMessageError);
+  messageErrorCloseBtn.addEventListener('click', onClickCloseMessageError);
 };
 
-function closeMessageError() {
+function onClickCloseMessageError() {
   messageError.remove();
   document.removeEventListener('keydown', onMessageErrorEscClose);
 }
@@ -77,7 +77,7 @@ function closeMessageError() {
 // Функция взята из интернета и доработана
 // Источник - https://www.freecodecamp.org/news/javascript-debounce-example
 
-function debounce (callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = 500) => {
   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
   // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
   let timeoutId;
