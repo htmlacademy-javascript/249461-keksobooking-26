@@ -1,9 +1,25 @@
 import {setData} from './backend.js';
 import {showMessageSuccess, showMessageError} from './util.js';
 import {setDefaultAddress, resetFilters} from './map.js';
+import {resetAdPhoto, resetAvatar} from './upload-photos.js';
+
+const ROOMS_WITHOUT_GUESTS = '100';
+const NO_GUESTS = '0';
+
+const MinApartmentPrice = {
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000,
+};
 
 const adForm = document.querySelector('.ad-form');
 const priceField = adForm.querySelector('#price');
+
+const roomsCount = adForm.querySelector('#room_number').value;
+const apartmentType = adForm.querySelector('#type').value;
+
 const priceRangeSlider = adForm.querySelector('.ad-form__slider');
 
 const pristine = new Pristine(adForm, {
@@ -11,11 +27,7 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
 });
 
-const ROOMS_WITHOUT_GUESTS = '100';
-const NO_GUESTS = '0';
-
 const checkGuestsCount = (guestsCount) => {
-  const roomsCount = adForm.querySelector('#room_number').value;
   if (roomsCount === ROOMS_WITHOUT_GUESTS || guestsCount === NO_GUESTS) {
     return roomsCount === ROOMS_WITHOUT_GUESTS && guestsCount === NO_GUESTS;
   }
@@ -24,8 +36,6 @@ const checkGuestsCount = (guestsCount) => {
 };
 
 const getGuestCountError = () => {
-  const roomsCount = adForm.querySelector('#room_number').value;
-
   if (roomsCount === ROOMS_WITHOUT_GUESTS) {
     return 'Не для гостей';
   }
@@ -44,29 +54,14 @@ const rooms = adForm.querySelector('#room_number');
 rooms.addEventListener('change', onRoomsChange);
 
 
-const minApartmentPrice = {
-  'bungalow': 0,
-  'flat': 1000,
-  'hotel': 3000,
-  'house': 5000,
-  'palace': 10000,
-};
-
-const checkAmount = (price) => {
-  const apartmentType = adForm.querySelector('#type').value;
-  return parseInt(price, 10) >= minApartmentPrice[apartmentType];
-};
-
-const getAmountError = () => {
-  const apartmentType = adForm.querySelector('#type').value;
-  return `Минимальная цена: ${minApartmentPrice[apartmentType]}`;
-};
+const checkAmount = (price) => parseInt(price, 10) >= MinApartmentPrice[apartmentType];
+const getAmountError = () => `Минимальная цена: ${MinApartmentPrice[apartmentType]}`;
 
 pristine.addValidator(priceField, checkAmount, getAmountError);
 
 const types = adForm.querySelector('#type');
 const onTypesChange = () => {
-  priceField.placeholder = minApartmentPrice[types.value];
+  priceField.placeholder = MinApartmentPrice[types.value];
   pristine.validate(priceField);
 };
 
@@ -121,8 +116,6 @@ adForm.addEventListener('submit', (evt) => {
   }
 
   resetFilters();
+  resetAdPhoto();
+  resetAvatar();
 });
-
-export {
-  priceField
-};

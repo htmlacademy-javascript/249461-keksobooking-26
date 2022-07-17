@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const KEY_ESCAPE = 'Escape';
 
 /*
 * Блок для показа ошибок при обмене информации с сервером
@@ -29,7 +30,7 @@ const messageSuccess = document.querySelector('#success').content.querySelector(
 const messageError = document.querySelector('#error').content.querySelector('.error');
 const messageErrorCloseBtn = messageError.querySelector('.error__button');
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const isEscapeKey = (evt) => evt.key === KEY_ESCAPE;
 
 /* Success Message */
 const onMessageSuccessEscClose = (evt) => {

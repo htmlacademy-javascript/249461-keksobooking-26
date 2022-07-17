@@ -1,11 +1,7 @@
 import {deactivateForm} from './forms.js';
 import {createAdPopup} from './popup.js';
 import {filterType, filterPrice, filterRooms, filterGuests, filterFeatures} from './filters.js';
-import {advertsPromise} from './backend.js';
-
-const adForm = document.querySelector('.ad-form');
-const priceRangeSlider = adForm.querySelector('.ad-form__slider');
-const filtersForm = document.querySelector('.map__filters');
+import {resetAdPhoto, resetAvatar} from './upload-photos.js';
 
 const MAP_START = {
   lat: 35.67500,
@@ -31,6 +27,12 @@ const AD_PIN_ICON = {
 };
 
 const DIGITS = 5;
+const ADS_COUNTER = 10;
+
+import {advertsPromise} from './backend.js';
+const adForm = document.querySelector('.ad-form');
+const priceRangeSlider = adForm.querySelector('.ad-form__slider');
+const filtersForm = document.querySelector('.map__filters');
 
 
 const addressField = adForm.querySelector('#address');
@@ -102,7 +104,6 @@ const createAdMarkers = (author, offer, location) => {
 
 };
 
-const ADS_COUNTER = 10;
 
 const showFilteredAds = (similarAdsList) => {
   mapPinLayer.clearLayers();
@@ -150,6 +151,8 @@ resetButton.addEventListener('click', (evt) => {
   setDefaultAddress();
 
   resetFilters();
+  resetAdPhoto();
+  resetAvatar();
 });
 
 
