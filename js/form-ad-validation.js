@@ -124,9 +124,9 @@ adForm.addEventListener('submit', (evt) => {
       },
       new FormData(evt.target),
     );
-  }
 
-  resetFilters();
-  resetAdPhoto();
-  resetAvatar();
+    resetFilters();
+    resetAdPhoto();
+    resetAvatar();
+  }
 });
